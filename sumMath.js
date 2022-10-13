@@ -1,6 +1,3 @@
-//remake of some Math Functions
-//or adding some others
-
 /**
  * Simple Math remake
  * 
