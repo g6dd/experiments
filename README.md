@@ -1,9 +1,9 @@
 # Experiments
 ```
-Small NodeJS Projects I Experiment in
+Small NodeJS Projects I Experiment on
 
 Basically everything could end up here.
 Mostly small snippets
 
-Tell me when im wrong to improve
+Tell me when and where im wrong or could do better to improve
 ```
