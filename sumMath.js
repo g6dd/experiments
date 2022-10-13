@@ -50,7 +50,7 @@ math.coll = (n) => {
  */
 math.exec = (str) => {
     if(/[^\d*+-/.%\(\)]/g.test(str)) return NaN;
-    const eq=str=>str.toString().replace(/[\(\)]/g,"").replace(/(\d+(.\d+)?%?)[*-/+](\d+(.\d+)?%?)/g,e=>(s=>e.split(s).map(Number).reduce((a,b)=>{switch(s){case"+":return a+=b; case"-":return a-=b;case"*":return a*=b;case"/":return a/=b;}}))(e.split(/[\d.]/g).join("")[0]));
+    const eq=str=>str.toString().replace(/[\(\)]/g,"").replace(/(\d+(.\d+)?%?)[*-/+](\d+(.\d+)?%?)/g,e=>(s=>e.replace(/[\d\.]+\%/g,e => (e.substr(0,e.length-1)/100)).split(s).map(Number).reduce((a,b)=>{switch(s){case"+":return a+=b; case"-":return a-=b;case"*":return a*=b;case"/":return a/=b;}}))(e.split(/[\d.]/g).join("")[0]));
     if(/\([\d*+-/.%]+\)/g.test(str))str=math.exec(str.replace(/\([\d*+-/.%]+\)/g,e=>e.substr(1,e.length-2).replace(/(\d+(.\d+)?%?)[*-/+](\d+(.\d+)?%?)/g,eq)));
     return Number(/[*-/+]/g.test(str)?eq(str):str);
 }
