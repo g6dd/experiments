@@ -52,10 +52,6 @@ string.toKebabCase = (str) => str.split(/\W+/g).map(e=>e.toLowerCase()).join("-"
  * @param {*} len Chunk Length
  * @returns 
  */
-string.chunkSplit = (str,len=2) => {
-    const result = [];
-    str.replace(new RegExp(`[\\s\\S]{1,${len}}`,"g"),s=>result.push(s))
-    return result;
-};
+string.chunkSplit = (str,len=2) => (res=>(str.replace(new RegExp(`[\\s\\S]{1,${len}}`,"g"),s=>res.push(s)),res))([]);
 
 module.exports = string;
