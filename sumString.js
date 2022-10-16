@@ -14,7 +14,7 @@ string.strrev = (str) => str.split("").reverse().join("");
  * Creates a Range of Characters
  * @param {string} regex Regular Expression
  */
-string.range = (regex) => Array.from({length:65560}, (e,i) => String.fromCharCode('A'.charCodeAt()+i-32)).filter(e =>!!new RegExp(`${regex}`).exec(e)).join("");
+string.range = (regex) => Array.from({length:65535}, (e,i) => String.fromCharCode('A'.charCodeAt()+i-32)).filter(e =>!!new RegExp(`${regex}`).exec(e)).join("");
 /**
  * Returns if the String equals to another string. 
  * 

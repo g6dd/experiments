@@ -53,4 +53,16 @@ math.trunc(Math.PI)                             // 3
 math.E                                          // 2.7182818284590455
 math.SQRT1_2                                    // 0.7071067811865476
 math.SQRT2                                      // 1.4142135623730951
+
+//string
+const string = require("./sumString");
+
+string.strrev("Example String");                // 'gnirtS elpmaxE'
+string.range("[a-g0-9]");                       // '0123456789abcdefg'
+string.equals("abc","Abc");                     // false
+string.equalsIgnoreCase("abc","Abc");           // true
+string.toCamelCase("Example String");           // 'ExampleString'
+string.toSnakeCase("Example String");           // 'example_string'
+string.toKebabCase("Example String");           // 'example-string'
+string.chunkSplit("Example String", 3);         // ['Exa', 'mpl', 'e S', 'tri', 'ng']
 ```
