@@ -1,4 +1,4 @@
-const args = process.argv.slice(2);
+const args = ["-v","Video","-a","-b","Bus"]; //process.argv.slice(2);
 
 const argv = {
     /**
@@ -14,10 +14,9 @@ const argv = {
      * @returns `Array`
      */
     get get() {
-        return (...arguments) => arguments.map(argument => {
-            if(!this.contains(argument) || !argument?.startsWith("-") || argument == "-") return;
-            const value = args[args.indexOf(argument)+1];
-            return (!value || value?.startsWith("-")) ? null : value;
+        return (...arguments) => arguments?.map(arg => {
+            if(!this.contains(arg) || !/\-\w+/g.test(arg)) return;
+            return (arg=args[args.indexOf(arg)+1])&&(!arg||!!/(\-?)\w+/g.exec(arg)?.[1])?void 0:arg;
         });
     }
 }

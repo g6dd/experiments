@@ -14,7 +14,7 @@ string.strrev = (str) => str.split("").reverse().join("");
  * Creates a Range of Characters
  * @param {string} regex Regular Expression
  */
-string.range = (regex) => Array.from({length:65592}, (e,i) => String.fromCharCode('A'.charCodeAt()+i-32)).filter(e =>!!new RegExp(`${regex}`).exec(e)).join("");
+string.range = (regex) => Array.from({length:65560}, (e,i) => String.fromCharCode('A'.charCodeAt()+i-32)).filter(e =>!!new RegExp(`${regex}`).exec(e)).join("");
 /**
  * Returns if the String equals to another string. 
  * 
@@ -46,5 +46,16 @@ string.toSnakeCase = (str) => str.split(/\W+/g).map(e=>e.toLowerCase()).join("_"
  * @param {string} str String
 */
 string.toKebabCase = (str) => str.split(/\W+/g).map(e=>e.toLowerCase()).join("-");
+/**
+ * Splits the string into Chunks
+ * @param {*} str String
+ * @param {*} len Chunk Length
+ * @returns 
+ */
+string.chunkSplit = (str,len=2) => {
+    const result = [];
+    str.replace(new RegExp(`[\\s\\S]{1,${len}}`,"g"),s=>result.push(s))
+    return result;
+};
 
 module.exports = string;
