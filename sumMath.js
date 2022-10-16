@@ -15,7 +15,7 @@ math.abs = (n) => Number(n>=0?n:-n);
  * @param  {number} n Number
  */
 math.acos = (n) => (isNaN(n)||n>=1||n<=-2)?(n==1?0:NaN):((n=2+(Number(n)*2)),Number(!!n?Math.PI/(n):Math.PI));
-/**
+/**Z
  * Returns the average from an Array
  * @param  {...number} n Number
  */
@@ -43,16 +43,6 @@ math.coll = (n) => {
     if(typeof n !== "number" || n<1) return NaN;
     const arr = [], collatz = n => ((arr.push(n)),(n<=1)?n:collatz(!(n%2)?math.round(n/2,0):3*n+1));
     return collatz(n), arr;
-}
-/**
- * Returns the result of the given equation
- * @param  {string} str simple equation (no spaces allowed)
- */
-math.exec = (str) => {
-    if(/[^\d*+-/.%\(\)]/g.test(str)) return NaN;
-    const eq=str=>str.toString().replace(/[\(\)]/g,"").replace(/(\d+(.\d+)?%?)[*-/+](\d+(.\d+)?%?)/g,e=>(s=>e.replace(/[\d\.]+\%/g,e => (e.substr(0,e.length-1)/100)).split(s).map(Number).reduce((a,b)=>{switch(s){case"+":return a+=b; case"-":return a-=b;case"*":return a*=b;case"/":return a/=b;}}))(e.split(/[\d.]/g).join("")[0]));
-    if(/\([\d*+-/.%]+\)/g.test(str))str=math.exec(str.replace(/\([\d*+-/.%]+\)/g,e=>e.substr(1,e.length-2).replace(/(\d+(.\d+)?%?)[*-/+](\d+(.\d+)?%?)/g,eq)));
-    return Number(/[*-/+]/g.test(str)?eq(str):str);
 }
 /**
  * Returns {@link Math.E} raised to the power of a number
@@ -134,6 +124,43 @@ math.sqrt = (n) => math.rt(n,2);
  * @param  {number} n Number
  */
 math.trunc = (n) => Number(n.toString().split(".")[0]);
+/**
+ * Returns the result of the given equation
+ * @param  {string} str simple equation (no spaces allowed)
+ */
+math.exec = (str) => {
+    if(/[^\d*+-/.\(\)]/g.test(str) || !str) return;
+    const   equation=/(-?(?:(?:\d+)?\.)?\d+)([\*\/\+\-])(-?(?:(?:\d+)?\.)?\d+)/g,symbols=/[\*\/\+\-]/g,
+            brokenEquation=/(-?(?:(?:\d+)?\.)?\d+)([\*\/\+\-]{2,})(-?(?:(?:\d+)?\.)?\d+)/g, brokenNumber=/([\*\/\+]{1}\d+\.?(?!\d+))/g,
+            brackets=/\(([\d*+-/.]+)\)/g,validNumber=/(-?(?:(?:\d+)?\.)?\d+)/g,
+            
+            checkForUseless = (str) =>{
+                if(brokenEquation.test(str)) str = math.exec(str.replace(brokenEquation,(e,s)=>{
+                    var _s=s.substr(0,2);
+                    _s= (_s=="--") ? "+" : ((_s=="+-"||_s=="-+") ? "-" : (!s.endsWith("-") ? _s.substr(0,1) : _s));
+                    return e.replace(s,_s);
+                }));
+                if(brackets.test(str)) str = str.replace(brackets,e => math.exec(e.substr(1,e.length-2)));
+                return str;
+            }, 
+            returnResult = (str) => {
+                str=checkForUseless(str);const _str=checkForUseless(str);
+                if(_str.replace && (!_str.replace(equation,'')||_str.replace(equation,'')!=_str)&&str!=_str)return returnResult(math.exec(str));
+                return !isNaN(_str)?Number(_str):math.exec(_str);
+            }, 
+            checkEquation = (n) =>(/[\*\/]/g.test(n)?5e3:3e3),
+            
+            numArr = str.split(validNumber).filter(e=>validNumber.test(e)).map(e => e),
+            symArr = str.split(validNumber).filter(e=>!validNumber.test(e)).slice(1).map((e,i,a)=> (e==''||!!e&&e.startsWith("."))?(i+1==a.length||e.startsWith(".")?void 0:"-"):e).filter(Boolean),
+            equations = symArr.map((e,i)=>[numArr[i],e=="-"?math.abs(numArr[i+1]):numArr[i+1]].join(e));
+            equations.sort((a,b) =>(checkEquation(a)-checkEquation(b)-equations.indexOf(a))).reverse();
+
+    const _=equation.exec(equations[0])?.slice(1).map((e,i)=>i==1?e:Number(e));
+    if(!_) return returnResult(str);
+
+    const doo={"*": (a,b) =>a*=b,"/": (a,b) =>a/=b,"+": (a,b) =>a+=b,"-": (a,b) =>a-=b,}[_[1]](_[0],_[2]);
+    return returnResult(checkForUseless(str.replace(equations[0],(equations[0].startsWith("-")?doo.toString().startsWith("-")?"":"+":"")+doo)));
+}
 /**
  * Represents Euler's number
  */
