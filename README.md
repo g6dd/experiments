@@ -9,11 +9,14 @@ Tell me when and where im wrong or could do better to improve
 # Current Projects
 ```javascript
 // argv
-// node myCoolProject -v value
+// node myCoolProject -v value -d -hasDefault
 const argv = require("./argv");
 
 argv.contains("-v")                             // returns true
 argv.get("-v")                                  // returns ["value"]
+argv.get("-v=fallback")                         // returns ["value"] because -v is set
+argv.get("-d")                                  // returns [undefined]
+argv.get("-d=fallback")                         // returns ["fallback"]
 
 // hash
 const hash = require("./hash");

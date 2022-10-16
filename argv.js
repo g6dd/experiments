@@ -14,7 +14,7 @@ const argv = {
      * @returns `Array`
      */
     get get() {
-        return (...arguments) => arguments?.map(arg => (!this.contains(arg) || !/\-+\w+/g.test(arg))||((arg=args[args.indexOf(arg)+1])&&(!arg||!!/(\-+?)\w+/g.exec(arg)?.[1]))?void 0:arg);
+        return (...arr) => arr.map(arg => (res=>!res||!!/(?:(\-+?)\w+)+/g.exec(res)?.[1]?/(?:=([\s\S]+))/g.exec(arg)?.[1]??void 0:res)((!this.contains(arg.replace(/(=[\s\S]+)/g,""))||!/(?:(\-+)\w+)+/g.test(arg))?void 0:args[args.indexOf(/((?:(\-+)\w+)+)/g.exec(arg)[0])+1]))
     }
 }
 
